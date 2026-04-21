@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #050510;
+  --foreground: #ffffff;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  overflow-x: hidden;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-glow-cyan {
+    text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff;
+  }
+  .text-glow-magenta {
+    text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+  }
+  .text-glow-orange {
+    text-shadow: 0 0 10px #ffaa00, 0 0 20px #ffaa00;
+  }
+  .bg-grid-cyber {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+  }
+}
