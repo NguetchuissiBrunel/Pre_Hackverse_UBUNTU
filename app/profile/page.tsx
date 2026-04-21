@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
-import { User, LogOut, Shield, Award, Calendar, Zap, Mail, RefreshCw } from "lucide-react";
-import { motion } from "framer-motion";
+import { User, LogOut, Shield, Award, Calendar, Mail } from "lucide-react";
 import { db } from "@/lib/db/dexie";
 
 export default function ProfilePage() {
-  const { user, stats } = useUser();
-  const [session, setSession] = useState<any>(null);
+  const { user } = useUser();
+  const [session, setSession] = useState<{ user?: { email?: string; user_metadata?: { username?: string } } } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,7 +44,7 @@ export default function ProfilePage() {
           <User size={48} />
         </div>
         <h2 className="text-2xl font-black text-white uppercase tracking-widest">{session?.user?.user_metadata?.username || "Héros_Local"}</h2>
-        <p className="text-neon-cyan/70 text-xs font-bold uppercase tracking-widest mt-1">C'est vous !</p>
+        <p className="text-neon-cyan/70 text-xs font-bold uppercase tracking-widest mt-1">C&apos;est vous !</p>
       </div>
 
       {/* Stats Cards */}

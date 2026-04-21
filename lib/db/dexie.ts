@@ -63,7 +63,7 @@ export interface Trophy {
 
 export interface Setting {
   key: string;
-  value: any;
+  value: unknown;
 }
 
 const db = new Dexie('FocusGrindDB') as Dexie & {

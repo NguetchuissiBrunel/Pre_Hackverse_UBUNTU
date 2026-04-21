@@ -41,5 +41,5 @@ export function useInventory() {
     return true;
   };
 
-  return { inventory: user?.inventory || {}, useItem };
+  return { inventory: user?.inventory || {}, handleUseItem: useItem };
 }

@@ -4,7 +4,7 @@ import TimerDisplay from "@/components/TimerDisplay";
 import { useTimerStore } from "@/lib/store/useTimerStore";
 import { useUser } from "@/hooks/useUser";
 import { DUNGEONS } from "@/lib/gamification/dungeonData";
-import { Zap, Trophy, Shield, Swords, Star } from "lucide-react";
+import { Zap, Swords } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 

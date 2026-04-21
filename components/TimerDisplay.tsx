@@ -3,22 +3,22 @@
 import { useEffect, useState, useRef } from "react";
 import { useTimerStore } from "@/lib/store/useTimerStore";
 import { motion } from "framer-motion";
-import { Play, Pause, Square, ShieldAlert, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, Square, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { audioManager } from "@/lib/audio/audioManager";
 import PenaltyModal from "./PenaltyModal";
 import { usePenaltyBox } from "@/hooks/usePenaltyBox";
 import { useUser } from "@/hooks/useUser";
-import { DUNGEONS } from "@/lib/gamification/dungeonData";
+
 
 export default function TimerDisplay() {
   const { 
-    timeLeft, isRunning, mode, pauseCount, activeDungeonId, isBerserkerMode,
-    startTimer, pauseTimer, abandonSession, finishSession, resetTimer, setMode, toggleBerserkerMode, tick 
+    timeLeft, isRunning, mode, pauseCount, isBerserkerMode,
+    startTimer, pauseTimer, abandonSession, finishSession, resetTimer, setMode, toggleBerserkerMode
   } = useTimerStore();
   const { user } = useUser();
   const [soundEnabled, setSoundEnabled] = useState(audioManager.soundEnabled);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
-  const { isLocked, lockedRemaining, abandonsToday } = usePenaltyBox();
+  const { isLocked, lockedRemaining } = usePenaltyBox();
   
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const visibilityTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -70,8 +70,8 @@ export default function TimerDisplay() {
         if ('wakeLock' in navigator && isRunning) {
           wakeLockRef.current = await navigator.wakeLock.request('screen');
         }
-      } catch (err: any) {
-        console.warn(`${err.name}, ${err.message}`);
+      } catch (err: unknown) {
+        console.warn(`${err instanceof Error ? err.name : 'Error'}, ${err instanceof Error ? err.message : String(err)}`);
       }
     };
 

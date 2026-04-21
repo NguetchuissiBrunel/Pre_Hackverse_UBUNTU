@@ -1,6 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db/dexie";
 import { useEffect } from "react";
+import { calculateLevelFromXp } from "@/lib/gamification/engine";
 
 const DAILY_QUESTS_TEMPLATES = [
   { id: 'daily_pomo_3', type: 'daily' as const, description: 'Faire 3 Pomodoros', target: 3, rewardXp: 50, rewardCoins: 10 },

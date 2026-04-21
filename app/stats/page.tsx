@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@/hooks/useUser";
-import { Flame, Star, Coins, Zap } from "lucide-react";
+import { Flame, Coins, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db/dexie";

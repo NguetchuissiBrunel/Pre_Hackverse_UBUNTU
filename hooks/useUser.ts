@@ -19,6 +19,7 @@ export function useUser() {
           streak: 0,
           talentPoints: 0,
           talents: [],
+          inventory: {},
         });
       }
     };

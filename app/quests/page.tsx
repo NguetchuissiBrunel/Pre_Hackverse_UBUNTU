@@ -20,7 +20,7 @@ export default function QuestsPage() {
         <h1 className="text-3xl font-black uppercase tracking-widest text-white text-glow-cyan mb-2 flex items-center gap-2">
           <Target /> Contrats
         </h1>
-        <p className="text-gray-400 text-sm">Accomplissez vos objectifs quotidiens pour gagner de l'XP et des Pomocoins supplémentaires.</p>
+        <p className="text-gray-400 text-sm">Accomplissez vos objectifs quotidiens pour gagner de l&apos;XP et des Pomocoins supplémentaires.</p>
       </div>
 
       {/* Dailies */}

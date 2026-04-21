@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { motion, AnimatePresence } from "framer-motion";
-import { LogIn, UserPlus, Mail, Lock, ShieldCheck, ArrowRight, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+import { UserPlus, Mail, Lock, ShieldCheck, ArrowRight, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
@@ -36,8 +36,9 @@ export default function AuthPage() {
         alert("Veuillez vérifier votre email pour confirmer l'inscription !");
       }
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Une erreur est survenue");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Une erreur est survenue";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

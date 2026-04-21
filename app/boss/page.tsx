@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { CURRENT_WEEK_BOSS, getWeeklyFocusMinutes } from "@/lib/gamification/bossEngine";
-import { Shield, Swords, Zap, Skull, Trophy, History, Info } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Swords, Zap, Skull, Trophy, History, Info } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function BossPage() {
   const [focusMinutes, setFocusMinutes] = useState(0);
@@ -82,7 +82,7 @@ export default function BossPage() {
 
         <div className="mt-6 text-center">
           <h2 className={`text-2xl font-black uppercase tracking-widest ${isDefeated ? 'text-gray-400' : 'text-white'}`}>{boss.name}</h2>
-          <p className="text-xs text-gray-500 max-w-xs mx-auto mt-2 italic">"{boss.description}"</p>
+          <p className="text-xs text-gray-500 max-w-xs mx-auto mt-2 italic">&quot;{boss.description}&quot;</p>
         </div>
       </div>
 

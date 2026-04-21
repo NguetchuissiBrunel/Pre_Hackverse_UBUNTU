@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/hooks/useUser";
-import { Trophy, Users, Shield, Medal, Globe, Ghost, Info } from "lucide-react";
+import { Trophy, Users, Medal, Globe, Ghost, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface LeaderboardEntry {
@@ -40,7 +40,7 @@ export default function LeaderboardPage() {
 
         if (error) throw error;
         setOnlineUsers(data || []);
-      } catch (err) {
+      } catch {
         console.warn("Supabase non configuré ou erreur reseau, utilisation des PNJ.");
         setOnlineUsers([]);
       } finally {
@@ -126,7 +126,7 @@ export default function LeaderboardPage() {
                         <h4 className={`font-bold uppercase tracking-tight ${isCurrentUser ? 'text-neon-cyan' : 'text-white'}`}>
                           {u.username}
                         </h4>
-                        {isNpc && <Ghost size={12} className="text-gray-600" title="Bot" />}
+                        {isNpc && <Ghost size={12} className="text-gray-600" aria-label="Bot" />}
                       </div>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-gray-400 uppercase font-black tracking-tighter border border-white/5">

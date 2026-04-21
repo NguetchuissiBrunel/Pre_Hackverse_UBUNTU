@@ -33,14 +33,13 @@ class AudioManager {
   private initSounds() {
     const sfxList = AUDIO_PATHS.sfx;
     Object.keys(sfxList).forEach((key) => {
-      const name = key as keyof typeof AUDIO_PATHS.sfx;
-      this.sfxLib[name] = new Howl({
-        src: [sfxList[name]],
+      this.sfxLib[key] = new Howl({
+        src: [sfxList[key as keyof typeof AUDIO_PATHS.sfx]],
         volume: 1.0,
         preload: true,
-        onloaderror: (id, err) => console.warn(`Erreur de chargement SFX [${name}] :`, err),
+        onloaderror: (id, err) => console.warn(`Erreur de chargement SFX [${key}] :`, err),
         onplayerror: (id, err) => {
-          console.warn(`Erreur de lecture SFX [${name}] :`, err);
+          console.warn(`Erreur de lecture SFX [${key}] :`, err);
           this.resumeContext();
         }
       });
@@ -49,10 +48,10 @@ class AudioManager {
 
   private async resumeContext() {
     if (this.ctxResumed) return;
-    // @ts-ignore
-    if (Howler.ctx && Howler.ctx.state === 'suspended') {
-      // @ts-ignore
-      await Howler.ctx.resume();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((Howler as any).ctx && (Howler as any).ctx.state === 'suspended') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (Howler as any).ctx.resume();
       this.ctxResumed = true;
       console.log("Audio Context repris avec succès.");
     }
@@ -80,7 +79,7 @@ class AudioManager {
     Object.values(this.sfxLib).forEach(sfx => sfx.stop());
   }
 
-  public playAmbience(name: keyof typeof AUDIO_PATHS.ambience) {
+  public playAmbience() {
     // Désactivé à la demande de l'utilisateur
     return;
   }
@@ -92,10 +91,10 @@ class AudioManager {
 
   public toggleSound() {
     this.soundEnabled = !this.soundEnabled;
-    // @ts-ignore
-    if (typeof Howler !== 'undefined') {
-      // @ts-ignore
-      Howler.mute(!this.soundEnabled);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (typeof (Howler as any) !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (Howler as any).mute(!this.soundEnabled);
     }
     return this.soundEnabled;
   }

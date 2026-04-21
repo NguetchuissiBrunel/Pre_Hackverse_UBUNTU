@@ -76,7 +76,7 @@ export default function PenaltyModal({ isOpen, onClose, onConfirmAbandon }: Pena
             
             <h2 className="text-xl font-bold text-white uppercase tracking-widest mb-2 text-center text-glow-magenta">Abandonner la session ?</h2>
             <p className="text-gray-400 text-sm text-center mb-6">
-              L'abandon entraînera une perte totale d'XP pour cette session et comptera pour la Penalty Box. Pour confirmer votre abandon, vous devez prouver votre détermination en tapant la phrase suivante **sans erreur** (copier-coller désactivé).
+              L&apos;abandon entraînera une perte totale d&apos;XP pour cette session et comptera pour la Penalty Box. Pour confirmer votre abandon, vous devez prouver votre détermination en tapant la phrase suivante **sans erreur** (copier-coller désactivé).
             </p>
 
             <div className="w-full bg-oled-black/50 p-4 border border-white/10 rounded-lg mb-6 select-none font-mono text-sm leading-relaxed text-neon-cyan/70">
@@ -108,7 +108,7 @@ export default function PenaltyModal({ isOpen, onClose, onConfirmAbandon }: Pena
                 onClick={checkPhrase}
                 className="flex-1 py-3 bg-neon-magenta text-white rounded-lg font-bold uppercase tracking-widest shadow-[0_0_15px_#ff00ff] hover:bg-neon-magenta/80 transition-colors"
               >
-                Confirmer l'Échec
+                Confirmer l&apos;Échec
               </button>
             </div>
           </motion.div>
