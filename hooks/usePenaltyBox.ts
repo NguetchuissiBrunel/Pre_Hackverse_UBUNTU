@@ -48,7 +48,7 @@ export function usePenaltyBox() {
       .then(sessions => {
         if (sessions.length > 0) {
           const lastAbandonsTime = sessions[0].dateEnd;
-          const unlockTime = new Date(lastAbandonsTime.getTime() + penaltyMinutes * 60000);
+          const unlockTime = new Date(new Date(lastAbandonsTime).getTime() + penaltyMinutes * 60000);
           
           setLockedUntil(unlockTime);
           

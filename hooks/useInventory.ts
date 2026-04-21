@@ -6,7 +6,7 @@ import { useUser } from "./useUser";
 export function useInventory() {
   const { user } = useUser();
 
-  const useItem = async (itemId: string) => {
+  const handleUseItem = async (itemId: string) => {
     if (!user || !user.inventory || !user.inventory[itemId] || user.inventory[itemId] <= 0) {
       alert("Vous ne possédez pas cet objet !");
       return false;
@@ -41,5 +41,5 @@ export function useInventory() {
     return true;
   };
 
-  return { inventory: user?.inventory || {}, useItem };
+  return { inventory: user?.inventory || {}, handleUseItem };
 }

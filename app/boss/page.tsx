@@ -2,33 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { CURRENT_WEEK_BOSS, getWeeklyFocusMinutes } from "@/lib/gamification/bossEngine";
-import { Shield, Swords, Zap, Skull, Trophy, History, Info } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Swords, Zap, Skull, Trophy, History, Info } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function BossPage() {
   const [focusMinutes, setFocusMinutes] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const boss = CURRENT_WEEK_BOSS;
 
   useEffect(() => {
-    const loadData = async () => {
+    // Initialiser les minutes de focus réelles depuis Dexie
+    const loadStats = async () => {
       const mins = await getWeeklyFocusMinutes();
       setFocusMinutes(mins);
-      setLoading(false);
     };
-    loadData();
+    loadStats();
   }, []);
 
-  const boss = CURRENT_WEEK_BOSS;
   const progress = Math.min(100, (focusMinutes / boss.targetMinutes) * 100);
   const isDefeated = focusMinutes >= boss.targetMinutes;
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-oled-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-neon-magenta"></div>
-      </div>
-    );
-  }
 
   return (
     <main className="min-h-screen pb-40 bg-oled-black bg-grid-cyber p-6 pt-12 relative overflow-x-hidden">
@@ -37,20 +28,26 @@ export default function BossPage() {
       <div className={`absolute top-0 left-0 w-full h-[600px] transition-colors duration-1000 ${isDefeated ? 'bg-neon-cyan/5' : 'bg-red-900/10'} blur-[120px] pointer-events-none`} />
 
       {/* Header */}
-      <div className="relative z-10 mb-8 text-center">
-        <h1 className="text-3xl font-black uppercase tracking-[0.3em] text-white text-glow-magenta mb-2">Raid Hebdomadaire</h1>
-        <p className="text-gray-400 text-[10px] uppercase tracking-widest font-bold">Unissez votre focus pour terrasser la bête</p>
+      <div className="flex flex-col items-center mb-12 relative z-10">
+        <div className="flex items-center gap-2 px-4 py-1 bg-red-500/20 border border-red-500/30 rounded-full mb-4">
+          <Swords size={14} className="text-red-500 animate-pulse" />
+          <span className="text-[10px] font-black text-red-500 uppercase tracking-widest">Raid de Boss Hebdomadaire</span>
+        </div>
+        <h1 className="text-4xl font-black text-white uppercase tracking-tighter text-center leading-none">
+          {boss.name}
+        </h1>
+        <p className="text-gray-500 text-[10px] uppercase tracking-widest mt-2">Semaine 16 • Grille de Combat</p>
       </div>
 
-      {/* Boss Avatar Area */}
-      <div className="relative z-10 flex flex-col items-center mb-12">
-        <motion.div
-           animate={!isDefeated ? { 
-             scale: [1, 1.05, 1],
-             filter: ["hue-rotate(0deg)", "hue-rotate(10deg)", "hue-rotate(0deg)"]
-           } : { scale: 0.8, opacity: 0.5, filter: "grayscale(100%)" }}
-           transition={{ repeat: Infinity, duration: 4 }}
-           className="relative flex items-center justify-center"
+      {/* Boss Visualizer */}
+      <div className="relative z-10 flex flex-col items-center mb-8">
+        <motion.div 
+          animate={!isDefeated ? { 
+            y: [0, -10, 0],
+            rotate: [-1, 1, -1]
+          } : {}}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          className="relative"
         >
           {/* Monster Silhouette / Icon */}
           <div className={`w-48 h-48 rounded-full flex items-center justify-center border-4 transition-colors ${isDefeated ? 'border-neon-cyan/50' : 'border-neon-magenta/50'} bg-glass-dark relative overflow-hidden shadow-2xl`}>
@@ -58,31 +55,19 @@ export default function BossPage() {
              
              {/* Damage Particles (Visual only) */}
              {!isDefeated && (
-               <motion.div 
-                 animate={{ y: [-10, -100], opacity: [0, 1, 0] }}
-                 transition={{ repeat: Infinity, duration: 1 }}
-                 className="absolute bottom-10 text-red-500 font-black text-xl"
-               >
-                 -1 HP
-               </motion.div>
+               <div className="absolute inset-0 bg-red-500/5 animate-pulse" />
              )}
           </div>
 
-          {/* Defeated Overlay */}
-          {isDefeated && (
-            <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute -top-4 -right-4 bg-yellow-400 text-black p-3 rounded-2xl shadow-xl rotate-12 flex items-center gap-2 font-black uppercase text-xs"
-            >
-              <Trophy size={16} /> Terrassé !
-            </motion.div>
-          )}
+          {/* Level Badge */}
+          <div className="absolute -bottom-2 right-0 bg-neon-magenta text-white text-[10px] font-black px-3 py-1 rounded-lg shadow-lg">
+            BOSS NIV. 50
+          </div>
         </motion.div>
 
         <div className="mt-6 text-center">
           <h2 className={`text-2xl font-black uppercase tracking-widest ${isDefeated ? 'text-gray-400' : 'text-white'}`}>{boss.name}</h2>
-          <p className="text-xs text-gray-500 max-w-xs mx-auto mt-2 italic">"{boss.description}"</p>
+          <p className="text-xs text-gray-500 max-w-xs mx-auto mt-2 italic">&quot;{boss.description}&quot;</p>
         </div>
       </div>
 
@@ -98,47 +83,41 @@ export default function BossPage() {
            <motion.div 
              initial={{ width: 0 }}
              animate={{ width: `${100 - progress}%` }}
-             className={`h-full rounded-full transition-all duration-1000 ${isDefeated ? 'bg-gray-600' : 'bg-gradient-to-r from-red-600 to-neon-magenta shadow-[0_0_15px_#ff00ff]'}`}
+             className={`h-full rounded-full shadow-[0_0_15px_rgba(255,0,255,0.5)] ${isDefeated ? 'bg-gray-700' : 'bg-gradient-to-r from-neon-magenta to-red-600'}`}
            />
         </div>
-        <div className="flex justify-between mt-2">
-          <span className="text-[8px] text-gray-600 uppercase font-bold tracking-widest">Fragilité</span>
-          <span className="text-[8px] text-gray-600 uppercase font-bold tracking-widest">Immortalité</span>
+        <div className="flex justify-between mt-2 px-2">
+            <div className="flex items-center gap-1">
+              <Zap size={12} className="text-yellow-400" />
+              <span className="text-[10px] text-gray-400 uppercase font-black">{focusMinutes} Infligés</span>
+            </div>
+            <span className="text-[10px] text-gray-500 uppercase font-bold">{progress.toFixed(1)}% ÉLIMINÉ</span>
         </div>
       </div>
 
-      {/* Stats & Actions */}
-      <div className="grid grid-cols-2 gap-4 relative z-10 max-w-md mx-auto">
-        <div className="bg-glass-dark border border-white/5 p-4 rounded-2xl flex flex-col items-center">
-          <Zap className="text-yellow-400 mb-2" size={20} />
-          <span className="text-[8px] text-gray-500 uppercase font-bold">Dégâts Infligés</span>
-          <span className="text-xl font-black text-white">{focusMinutes} <span className="text-xs">MIN</span></span>
+      {/* Rewards Info */}
+      <div className="relative z-10 w-full max-w-md mx-auto grid grid-cols-2 gap-4">
+        <div className="bg-glass-dark border border-white/5 p-4 rounded-2xl">
+          <div className="flex items-center gap-2 mb-2">
+            <Trophy size={16} className="text-yellow-400" />
+            <span className="text-[10px] font-black text-white uppercase tracking-widest">Récompense</span>
+          </div>
+          <p className="text-xl font-black text-neon-cyan">+{boss.rewardXp} XP</p>
         </div>
-        <div className="bg-glass-dark border border-white/5 p-4 rounded-2xl flex flex-col items-center text-center">
-          <Swords className="text-neon-cyan mb-2" size={20} />
-          <span className="text-[8px] text-gray-500 uppercase font-bold">Récompense Loot</span>
-          <span className="text-sm font-black text-neon-cyan">+{boss.rewardXp} XP</span>
-          <span className="text-[8px] text-yellow-400 font-bold tracking-tighter">+{boss.rewardCoins} COINS</span>
+        <div className="bg-glass-dark border border-white/5 p-4 rounded-2xl">
+          <div className="flex items-center gap-2 mb-2">
+            <History size={16} className="text-neon-magenta" />
+            <span className="text-[10px] font-black text-white uppercase tracking-widest">Temps</span>
+          </div>
+          <p className="text-xl font-black text-white">Fin Dimanche</p>
         </div>
       </div>
 
-      {/* Raid Tips */}
-      <div className="mt-8 p-4 bg-neon-magenta/5 border border-neon-magenta/20 rounded-2xl relative z-10 max-w-md mx-auto flex gap-3 shadow-inner">
-         <Info className="text-neon-magenta shrink-0" size={20} />
-         <p className="text-[10px] text-gray-400 uppercase leading-relaxed tracking-tighter">
-           Chaque minute de <span className="text-white">Pomodoro, Sprint ou Deepwork</span> inflige 1 point de dégât. Vainquez le boss avant dimanche minuit pour réclamer le butin légendaire !
-         </p>
-      </div>
-
-      {/* Footer / Back */}
-      <div className="mt-12 text-center relative z-10">
-        <motion.button 
-          whileHover={{ x: -4 }}
-          onClick={() => window.history.back()}
-          className="text-[10px] text-gray-500 uppercase font-bold flex items-center justify-center gap-2 mx-auto hover:text-white transition-colors"
-        >
-          <History size={14} /> Retour au Hub
-        </motion.button>
+      <div className="relative z-10 w-full max-w-md mx-auto mt-8 p-4 bg-neon-cyan/5 border border-neon-cyan/20 rounded-2xl flex items-start gap-3">
+        <Info size={18} className="text-neon-cyan shrink-0 mt-0.5" />
+        <p className="text-gray-400 text-[10px] uppercase tracking-widest leading-relaxed">
+          Le Kraken se nourrit de votre distraction. Chaque minute de focus est un coup d&apos;épée dans son ego.
+        </p>
       </div>
 
     </main>

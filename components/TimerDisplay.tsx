@@ -8,12 +8,11 @@ import { audioManager } from "@/lib/audio/audioManager";
 import PenaltyModal from "./PenaltyModal";
 import { usePenaltyBox } from "@/hooks/usePenaltyBox";
 import { useUser } from "@/hooks/useUser";
-import { DUNGEONS } from "@/lib/gamification/dungeonData";
 
 export default function TimerDisplay() {
   const { 
-    timeLeft, isRunning, mode, pauseCount, activeDungeonId, isBerserkerMode,
-    startTimer, pauseTimer, abandonSession, finishSession, resetTimer, setMode, toggleBerserkerMode, tick 
+    timeLeft, isRunning, mode, pauseCount, isBerserkerMode,
+    startTimer, pauseTimer, abandonSession, finishSession, resetTimer, setMode, toggleBerserkerMode 
   } = useTimerStore();
   const { user } = useUser();
   const [soundEnabled, setSoundEnabled] = useState(audioManager.soundEnabled);
@@ -61,8 +60,6 @@ export default function TimerDisplay() {
     }
   };
 
-  // Les fonctions de décompte (tick) sont maintenant gérées par le store global !
-  
   // Wake Lock & Visibility Logic
   useEffect(() => {
     const requestWakeLock = async () => {
@@ -70,8 +67,8 @@ export default function TimerDisplay() {
         if ('wakeLock' in navigator && isRunning) {
           wakeLockRef.current = await navigator.wakeLock.request('screen');
         }
-      } catch (err: any) {
-        console.warn(`${err.name}, ${err.message}`);
+      } catch (err: unknown) {
+        console.warn("WakeLock error:", err);
       }
     };
 
@@ -123,11 +120,9 @@ export default function TimerDisplay() {
   };
 
   const circumference = 2 * Math.PI * 120;
-  // Les durées doivent correspondre exactement à celles définies dans useTimerStore.ts
   const maxTime = mode === 'pomodoro' ? 20 * 60 : mode === 'deepwork' ? 90 * 60 : mode === 'sprint' ? 15 * 60 : 3600;
   const strokeDashoffset = mode === 'flow' ? 0 : Math.max(0, circumference - (timeLeft / maxTime) * circumference);
 
-  // --- Logique Dynamique des Talents ---
   const hasBerserkerTalent = user?.talents.includes('pow_t1');
   const maxPauses = 3 + (user?.talents.includes('focus_t2') ? 1 : 0) + (user?.talents.includes('pow_t2') ? 1 : 0);
 
@@ -269,7 +264,6 @@ export default function TimerDisplay() {
             </motion.button>
           )}
           
-          {/* Status Pause/Abandons */}
           <div className="h-4 flex flex-col items-center gap-1">
             {isBerserkerMode && (
               <motion.span 

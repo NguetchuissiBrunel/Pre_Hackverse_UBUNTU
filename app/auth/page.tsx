@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { motion, AnimatePresence } from "framer-motion";
-import { LogIn, UserPlus, Mail, Lock, ShieldCheck, ArrowRight, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+import { UserPlus, Mail, Lock, ShieldCheck, ArrowRight, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
@@ -55,7 +55,6 @@ export default function AuthPage() {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md bg-glass-dark border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative z-10 shadow-2xl"
       >
-        {/* Header Icons */}
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 rounded-2xl bg-neon-cyan/20 flex items-center justify-center text-neon-cyan shadow-[0_0_20px_rgba(0,243,255,0.3)]">
             <Zap size={32} />
@@ -144,7 +143,6 @@ export default function AuthPage() {
           </button>
         </div>
 
-        {/* Security Badge */}
         <div className="flex items-center justify-center gap-1 mt-6 opacity-30">
           <ShieldCheck size={12} className="text-neon-cyan" />
           <span className="text-[8px] text-white uppercase tracking-tighter">Sécurisé par le protocole Supabase</span>
