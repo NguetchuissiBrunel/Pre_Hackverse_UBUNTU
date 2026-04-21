@@ -1,93 +1,88 @@
 "use client";
 
 import { useQuests } from "@/hooks/useQuests";
-import { Target, Zap, ShieldCheck } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle, Coins, Star, Target } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function QuestsPage() {
   const { quests, claimQuest } = useQuests();
+  
+  const dailyQuests = quests.filter(q => q.type === 'daily');
 
   return (
-    <main className="min-h-screen pb-40 bg-oled-black bg-grid-cyber p-6 pt-12 relative overflow-x-hidden">
+    <main className="min-h-screen pb-40 bg-oled-black bg-grid-cyber flex flex-col items-center relative overflow-x-hidden p-6 pt-12">
       
+      {/* Background decorations */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-neon-cyan/5 rounded-full blur-[100px] pointer-events-none" />
+
       {/* Header */}
-      <div className="flex flex-col items-center mb-10 relative z-10">
-        <div className="w-16 h-16 rounded-2xl bg-neon-cyan/20 flex items-center justify-center text-neon-cyan mb-4 shadow-[0_0_20px_rgba(0,243,255,0.3)]">
-          <Target size={32} />
-        </div>
-        <h1 className="text-3xl font-black text-white uppercase tracking-widest text-center leading-none">
-          Contrats de Focus
+      <div className="w-full max-w-md flex flex-col items-start mb-8 z-10">
+        <h1 className="text-3xl font-black uppercase tracking-widest text-white text-glow-cyan mb-2 flex items-center gap-2">
+          <Target /> Contrats
         </h1>
-        <p className="text-gray-400 text-xs mb-8 uppercase tracking-widest text-center mt-2">
-          Accomplissez ces contrats pour gagner de l&apos;XP et des Pomocoins.
-        </p>
+        <p className="text-gray-400 text-sm">Accomplissez vos objectifs quotidiens pour gagner de l'XP et des Pomocoins supplémentaires.</p>
       </div>
 
-      {/* Quests List */}
-      <div className="space-y-4 relative z-10 max-w-md mx-auto">
-        <AnimatePresence mode="popLayout">
-          {quests.map((quest) => {
-            const isCompleted = quest.progress >= quest.target;
-            
-            return (
-              <motion.div
-                key={quest.id}
-                layout
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className={`bg-glass-dark border ${quest.claimed ? 'border-gray-800 opacity-50' : isCompleted ? 'border-neon-cyan shadow-[0_0_15px_rgba(0,243,255,0.2)]' : 'border-white/5'} p-5 rounded-3xl relative overflow-hidden group transition-all`}
-              >
-                {/* Status Icon */}
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-neon-cyan uppercase tracking-[0.2em] mb-1">{quest.type}</span>
-                    <h3 className="text-lg font-bold text-white leading-tight">{quest.title}</h3>
+      {/* Dailies */}
+      <div className="w-full max-w-md z-10 flex flex-col gap-4">
+        <h3 className="text-neon-orange uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
+          Quêtes Journalières
+          <div className="flex-1 h-[1px] bg-neon-orange/30"></div>
+        </h3>
+        
+        {dailyQuests.map((q) => {
+          const isCompletable = q.progress >= q.target && !q.done;
+          const progressPercent = Math.min(100, Math.round((q.progress / q.target) * 100));
+
+          return (
+            <div key={q.id} className={`p-4 rounded-xl border relative overflow-hidden transition-all ${
+              q.done ? 'bg-white/5 border-white/10 opacity-50' : 
+              isCompletable ? 'bg-neon-cyan/10 border-neon-cyan shadow-[0_0_15px_rgba(0,243,255,0.2)]' : 
+              'bg-glass-dark border-white/20'
+            }`}>
+              
+              {/* Progress Background */}
+              {!q.done && (
+                <div 
+                  className="absolute left-0 top-0 bottom-0 bg-white/5 transition-all duration-1000" 
+                  style={{ width: `${progressPercent}%` }}
+                />
+              )}
+
+              <div className="relative z-10 flex justify-between items-center">
+                <div>
+                  <h4 className={`font-bold ${q.done ? 'text-gray-400 line-through' : 'text-white'}`}>
+                    {q.description}
+                  </h4>
+                  <div className="flex gap-3 text-xs mt-2 font-black">
+                    <span className="flex items-center gap-1 text-neon-cyan"><Star size={12}/> {q.rewardXp}</span>
+                    <span className="flex items-center gap-1 text-yellow-500"><Coins size={12}/> {q.rewardCoins}</span>
                   </div>
-                  {quest.claimed && (
-                    <ShieldCheck className="text-neon-cyan" size={20} />
+                </div>
+                
+                <div className="flex flex-col items-end gap-2">
+                  <span className="text-sm font-mono text-gray-400">{q.progress} / {q.target}</span>
+                  
+                  {isCompletable && (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => claimQuest(q.id)}
+                      className="bg-neon-cyan text-oled-black px-4 py-1 rounded font-black uppercase text-xs shadow-neon-cyan"
+                    >
+                      Réclamer
+                    </motion.button>
+                  )}
+                  {q.done && (
+                    <div className="text-neon-cyan flex items-center gap-1 text-xs uppercase font-bold">
+                      <CheckCircle size={14} /> Terminé
+                    </div>
                   )}
                 </div>
-
-                {/* Progress Bar */}
-                {!quest.claimed && (
-                  <>
-                    <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-2">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(100, (quest.progress / quest.target) * 100)}%` }}
-                        className="h-full bg-neon-cyan"
-                      />
-                    </div>
-                    <div className="flex justify-between items-center mb-4 text-[10px] uppercase font-bold tracking-widest">
-                      <span className="text-gray-500">{quest.progress} / {quest.target}</span>
-                      <div className="flex items-center gap-1 text-yellow-400">
-                        <Zap size={10} />
-                        <span>+{quest.rewardXp} XP • +{quest.rewardCoins} CP</span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {/* Action Button */}
-                {isCompleted && !quest.claimed && (
-                  <button 
-                    onClick={() => claimQuest(quest.id)}
-                    className="w-full py-3 bg-neon-cyan text-oled-black rounded-xl font-black uppercase tracking-widest text-xs shadow-neon-cyan hover:scale-[1.02] active:scale-[0.98] transition-all"
-                  >
-                    Récupérer la prime
-                  </button>
-                )}
-
-                {quest.claimed && (
-                  <div className="text-center py-2 text-[10px] font-black uppercase text-gray-500 tracking-widest">
-                    Contrat Terminé
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
     </main>

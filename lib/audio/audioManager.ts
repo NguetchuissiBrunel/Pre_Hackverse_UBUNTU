@@ -1,57 +1,102 @@
-"use client";
-
 import { Howl } from 'howler';
 
+// Le chemin virtuel vers nos futurs sons (dans public/sounds/)
+// Actuellement ce sont des chemins fictifs. L'utilisateur devra placer ses fichiers ici.
+const AUDIO_PATHS = {
+  sfx: {
+    start: '/sounds/sfx_start.mp3',
+    end: '/sounds/sfx_end.mp3',
+    pause: '/sounds/sfx_pause.mp3',
+    levelUp: '/sounds/sfx_levelup.mp3',
+  },
+  ambience: {
+    rain: '/sounds/amb_rain.mp3',
+    fire: '/sounds/amb_fire.mp3',
+    cafe: '/sounds/amb_cafe.mp3',
+  }
+};
+
 class AudioManager {
-  private sounds: Record<string, Howl> = {};
+  private sfxLib: Record<string, Howl> = {};
+  private currentAmbience: Howl | null = null;
+  private currentAmbienceId: string | null = null;
   public soundEnabled: boolean = true;
+  private ctxResumed: boolean = false;
 
   constructor() {
+    // Initialisation des effets sonores avec preload
     if (typeof window !== 'undefined') {
-      this.sounds = {
-        start: new Howl({ src: ['/sounds/sfx_start.mp3'], volume: 0.5 }),
-        end: new Howl({ src: ['/sounds/sfx_end.mp3'], volume: 0.7 }),
-        pause: new Howl({ src: ['/sounds/sfx_pause.mp3'], volume: 0.3 }),
-        levelup: new Howl({ src: ['/sounds/sfx_levelup.mp3'], volume: 0.8 }),
-        rain: new Howl({ src: ['/sounds/amb_rain.mp3'], loop: true, volume: 0.2 }),
-        fire: new Howl({ src: ['/sounds/amb_fire.mp3'], loop: true, volume: 0.2 }),
-        cafe: new Howl({ src: ['/sounds/amb_cafe.mp3'], loop: true, volume: 0.2 }),
-      };
-      
-      const stored = localStorage.getItem('sound_enabled');
-      if (stored !== null) this.soundEnabled = stored === 'true';
+      this.initSounds();
     }
   }
 
-  playSfx(name: string) {
-    if (!this.soundEnabled || !this.sounds[name]) return;
-    this.sounds[name].play();
-  }
-
-  startAmbience(name: string) {
-    if (!this.soundEnabled || !this.sounds[name]) return;
-    this.stopAllAmbience();
-    this.sounds[name].play();
-    this.sounds[name].fade(0, 0.2, 1000);
-  }
-
-  stopAllAmbience() {
-    ['rain', 'fire', 'cafe'].forEach(name => {
-      if (this.sounds[name]) {
-        this.sounds[name].fade(0.2, 0, 1000);
-        setTimeout(() => this.sounds[name].stop(), 1000);
-      }
+  private initSounds() {
+    const sfxList = AUDIO_PATHS.sfx;
+    Object.keys(sfxList).forEach((key) => {
+      const name = key as keyof typeof AUDIO_PATHS.sfx;
+      this.sfxLib[name] = new Howl({
+        src: [sfxList[name]],
+        volume: 1.0,
+        preload: true,
+        onloaderror: (id, err) => console.warn(`Erreur de chargement SFX [${name}] :`, err),
+        onplayerror: (id, err) => {
+          console.warn(`Erreur de lecture SFX [${name}] :`, err);
+          this.resumeContext();
+        }
+      });
     });
   }
 
-  stopAllSfx() {
-    Object.values(this.sounds).forEach(sound => sound.stop());
+  private async resumeContext() {
+    if (this.ctxResumed) return;
+    // @ts-ignore
+    if (Howler.ctx && Howler.ctx.state === 'suspended') {
+      // @ts-ignore
+      await Howler.ctx.resume();
+      this.ctxResumed = true;
+      console.log("Audio Context repris avec succès.");
+    }
   }
 
-  toggleSound() {
+  public playSfx(name: keyof typeof AUDIO_PATHS.sfx) {
+    if (!this.soundEnabled) return;
+    this.resumeContext();
+    
+    const sfx = this.sfxLib[name];
+    if (sfx) {
+      sfx.stop(); // Arrête l'instance précédente si elle joue encore
+      const id = sfx.play();
+      
+      // Sécurité : arrêt automatique après 10 secondes
+      setTimeout(() => {
+        sfx.stop(id);
+      }, 10000);
+    } else {
+      console.log(`[Audio] Son introuvable : ${name}`);
+    }
+  }
+
+  public stopAllSfx() {
+    Object.values(this.sfxLib).forEach(sfx => sfx.stop());
+  }
+
+  public playAmbience(name: keyof typeof AUDIO_PATHS.ambience) {
+    // Désactivé à la demande de l'utilisateur
+    return;
+  }
+
+  public stopAmbience() {
+    // Désactivé à la demande de l'utilisateur
+    return;
+  }
+
+  public toggleSound() {
     this.soundEnabled = !this.soundEnabled;
-    localStorage.setItem('sound_enabled', this.soundEnabled.toString());
-    if (!this.soundEnabled) this.stopAllAmbience();
+    // @ts-ignore
+    if (typeof Howler !== 'undefined') {
+      // @ts-ignore
+      Howler.mute(!this.soundEnabled);
+    }
     return this.soundEnabled;
   }
 }

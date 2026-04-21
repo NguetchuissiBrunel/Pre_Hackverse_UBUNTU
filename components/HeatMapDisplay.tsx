@@ -20,7 +20,7 @@ export default function HeatMapDisplay() {
     
     const aggregated: Record<string, number> = {};
     sessions.forEach(s => {
-      const dateStr = (s.dateStart as string).split('T')[0];
+      const dateStr = s.dateStart.toISOString().split('T')[0];
       const count = Math.floor(s.duration / 60); // Représente les minutes
       aggregated[dateStr] = (aggregated[dateStr] || 0) + count;
     });

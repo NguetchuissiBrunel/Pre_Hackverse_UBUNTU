@@ -1,7 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db/dexie";
 import { useEffect } from "react";
-import { calculateLevelFromXp } from "@/lib/gamification/engine";
 
 const DAILY_QUESTS_TEMPLATES = [
   { id: 'daily_pomo_3', type: 'daily' as const, description: 'Faire 3 Pomodoros', target: 3, rewardXp: 50, rewardCoins: 10 },
@@ -16,7 +15,7 @@ export function useQuests() {
     const initQuests = async () => {
       const now = new Date();
       // On retire les quêtes daily expirées
-      await db.quests.where('type').equals('daily').and(q => new Date(q.resetDate) < now).delete();
+      await db.quests.where('type').equals('daily').and(q => new Date(q.expiresAt) < now).delete();
 
       const currentDailies = await db.quests.where('type').equals('daily').toArray();
       if (currentDailies.length === 0) {
@@ -28,13 +27,13 @@ export function useQuests() {
           await db.quests.add({
             id: `${t.id}_${now.toISOString().split('T')[0]}`,
             type: t.type,
-            title: t.description,
+            description: t.description,
             target: t.target,
             progress: 0,
             rewardXp: t.rewardXp,
             rewardCoins: t.rewardCoins,
-            claimed: false,
-            resetDate: expiration.toISOString()
+            expiresAt: expiration,
+            done: false
           });
         }
       }
@@ -43,14 +42,14 @@ export function useQuests() {
       const startOfDay = new Date();
       startOfDay.setHours(0, 0, 0, 0);
 
-      const todaysSessions = await db.sessions.where('dateStart').aboveOrEqual(startOfDay.toISOString()).toArray();
+      const todaysSessions = await db.sessions.where('dateStart').aboveOrEqual(startOfDay).toArray();
       const allQuests = await db.quests.toArray();
 
       const pomos = todaysSessions.filter(s => s.type === 'pomodoro' && !s.interrupted).length;
       const dw = todaysSessions.filter(s => s.type === 'deepwork' && !s.interrupted).length;
 
       for (const q of allQuests) {
-        if (q.claimed) continue;
+        if (q.done) continue;
 
         let newProgress = q.progress;
         if (q.id.startsWith('daily_pomo_3')) {
@@ -60,7 +59,7 @@ export function useQuests() {
         }
 
         if (newProgress !== q.progress) {
-          await db.quests.update(q.id, { progress: Math.min(q.target, newProgress) });
+          await db.quests.update(q.id, { progress: newProgress });
         }
       }
     };
@@ -70,9 +69,9 @@ export function useQuests() {
 
   const claimQuest = async (questId: string) => {
     const q = await db.quests.get(questId);
-    if (!q || q.claimed || q.progress < q.target) return;
+    if (!q || q.done || q.progress < q.target) return;
 
-    await db.quests.update(questId, { claimed: true });
+    await db.quests.update(questId, { done: true });
     
     // Add XP & Coins
     const user = await db.user.get('me');

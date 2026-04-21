@@ -183,9 +183,9 @@ export default function ShopPage() {
 
 function InventoryTab() {
   const { user } = useUser();
-  const { handleUseItem } = useInventory();
+  const { useItem } = useInventory();
   const inventory = user?.inventory || {};
-  const items = Object.entries(inventory).filter((item) => item[1] > 0);
+  const items = Object.entries(inventory).filter(([_, qty]) => qty > 0);
 
   if (items.length === 0) {
     return (
@@ -217,7 +217,7 @@ function InventoryTab() {
             <div className="flex flex-col items-end gap-2">
               <span className="text-[10px] text-yellow-400 font-black">x{qty}</span>
               <button 
-                onClick={() => handleUseItem(id)}
+                onClick={() => useItem(id)}
                 className="px-4 py-1 bg-neon-cyan/20 border border-neon-cyan/30 text-neon-cyan text-[10px] font-black uppercase rounded hover:bg-neon-cyan hover:text-oled-black transition-all"
               >
                 Utiliser
