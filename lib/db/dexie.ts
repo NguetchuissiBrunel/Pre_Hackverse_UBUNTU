@@ -16,7 +16,7 @@ export interface Session {
   dateStart: string;
   dateEnd: string;
   duration: number;
-  type: 'pomodoro' | 'deepwork' | 'sprint' | 'flow';
+  type: 'pomodoro' | 'deepwork' | 'sprint' | 'flow' | 'custom';
   xp: number;
   interrupted: boolean;
   tag?: string;

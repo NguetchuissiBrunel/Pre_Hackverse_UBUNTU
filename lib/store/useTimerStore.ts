@@ -98,9 +98,9 @@ export const useTimerStore = create<TimerState>((set, get) => ({
     if (state.sessionStartTime && state.timeLeft < MODE_DURATIONS[state.mode]) {
       db.transaction('rw', db.sessions, db.user, async () => {
         await db.sessions.add({
-          dateStart: state.sessionStartTime!,
-          dateEnd: new Date(),
-          duration: MODE_DURATIONS[state.mode] - state.timeLeft,
+          dateStart: state.sessionStartTime!.toISOString(),
+          dateEnd: new Date().toISOString(),
+          duration: state.mode === 'flow' ? state.timeLeft : MODE_DURATIONS[state.mode] - state.timeLeft,
           type: state.mode,
           tag: 'Général',
           xp: 0,
@@ -179,8 +179,8 @@ export const useTimerStore = create<TimerState>((set, get) => ({
         const newTalentPoints = levelDiff > 0 ? user.talentPoints + levelDiff : user.talentPoints;
 
         await db.sessions.add({
-          dateStart: state.sessionStartTime!,
-          dateEnd: new Date(),
+          dateStart: state.sessionStartTime!.toISOString(),
+          dateEnd: new Date().toISOString(),
           duration: durationSec,
           type: state.mode,
           tag: 'Général',

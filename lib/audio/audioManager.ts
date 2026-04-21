@@ -44,6 +44,10 @@ class AudioManager {
     });
   }
 
+  stopAllSfx() {
+    Object.values(this.sounds).forEach(sound => sound.stop());
+  }
+
   toggleSound() {
     this.soundEnabled = !this.soundEnabled;
     localStorage.setItem('sound_enabled', this.soundEnabled.toString());
