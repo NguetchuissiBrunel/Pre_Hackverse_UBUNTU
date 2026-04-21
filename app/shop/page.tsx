@@ -185,7 +185,7 @@ function InventoryTab() {
   const { user } = useUser();
   const { handleUseItem } = useInventory();
   const inventory = user?.inventory || {};
-  const items = Object.entries(inventory).filter(([id, qty]) => qty > 0);
+  const items = Object.entries(inventory).filter((item) => item[1] > 0);
 
   if (items.length === 0) {
     return (

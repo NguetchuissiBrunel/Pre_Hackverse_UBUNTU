@@ -5,7 +5,6 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { User, LogOut, Trash2, Award, ShieldCheck } from "lucide-react";
 import { db } from "@/lib/db/dexie";
-import { motion } from "framer-motion";
 
 export default function ProfilePage() {
   const { user } = useUser();

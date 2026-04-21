@@ -36,8 +36,8 @@ export default function AuthPage() {
         alert("Veuillez vérifier votre email pour confirmer l'inscription !");
       }
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Une erreur est survenue");
+    } catch (err: unknown) {
+      setError((err as Error).message || "Une erreur est survenue");
     } finally {
       setLoading(false);
     }
