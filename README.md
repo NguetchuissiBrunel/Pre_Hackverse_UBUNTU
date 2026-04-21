@@ -1,20 +1,19 @@
-# 🌌 FocusGrind.sys - Forgez votre Productivité
+# 🌌 FocusGrind.sys - L'Élite de la Productivité Cyberpunk
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Database-blue?style=for-the-badge&logo=supabase)](https://supabase.com/)
-[![PWA](https://img.shields.io/badge/PWA-Offline--First-green?style=for-the-badge&logo=pwa)](https://web.dev/progressive-web-apps/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![PWA](https://img.shields.io/badge/PWA-High--Performance-green?style=for-the-badge&logo=pwa)](https://web.dev/progressive-web-apps/)
 
-**FocusGrind** n'est pas une simple application de productivité. C'est votre interface vers la discipline ultime. Dans un univers Cyberpunk immersif, transformez chaque minute de concentration en points d'expérience, améliorez vos stats, et survivez au raid hebdomadaire du Kraken.
+> *"La distraction est une erreur système. Le Focus est le correctif."*
+
+**FocusGrind** n'est pas une énième application de productivité. C'est un **système d'exploitation pour votre discipline**. Conçu pour les "Cyber-Héros" de l'ère moderne, il fusionne une gestion du temps de haut niveau avec une profondeur RPG digne des plus grands jeux cyberpunk.
 
 ---
 
-## 📸 Aperçu de l'Interface
+## 📸 Immersion Visuelle
 
 <div align="center">
   <img src="public/images/logo.png" alt="FocusGrind Logo" width="200" />
-  <br />
-  <p><i>"Protocol_Focus_Active // GRID_V.2.0"</i></p>
 </div>
 
 <div align="center">
@@ -24,74 +23,58 @@
 
 ---
 
-## 🛠️ Caractéristiques de l'Agent
+## 💎 Les Piliers du Protocole
 
-### ⚔️ Gamification RPG Immersive
-- **Système de Niveaux & XP** : Montez en grade à chaque session réussie.
-- **Arbre de Talents** : Débloquez des compétences (Berserker, Discipline du Matin) pour optimiser vos gains.
-- **Raid de Boss** : Un défi hebdomadaire où seule votre concentration peut vaincre le Kraken.
-- **Boutique Cyber** : Achetez des boucliers de streak et des consommables rares avec vos Pomocoins.
+### 📶 Le Pouvoir de l'Indépendance : Offline-First
+Dans la Grille, la connexion internet est un luxe, pas une nécessité. **FocusGrind** est bâti sur une architecture **Offline-First** radicale utilisant **Dexie.js**.
+- **Zéro Latence** : Chaque milliseconde de votre focus est enregistrée instantanément sur votre appareil.
+- **Continuité Totale** : Travaillez dans le métro, en avion ou dans une zone d'ombre numérique. L'application ne vous fera jamais défaut.
+- **Soumission Locale** : Vos sessions, vos gains d'XP et vos achats sont persistants localement dès que vous cliquez.
 
-### ⚡ Technologie de Pointe
-- **Offline-First Excellence** : Grâce à **Dexie.js**, l'app fonctionne partout, même sans réseau.
-- **Synchronisation Cloud Asynchrone** : Vos données sont sauvegardées sur **Supabase** dès que le réseau revient.
-- **PWA (Progressive Web App)** : Installez FocusGrind sur votre mobile ou desktop comme une application native.
-- **Design Cyberpunk** : Une UI OLED-black avec des effets de néon haute performance propulsés par **Framer Motion**.
+### 🔄 La Grille de Synchronisation (Cloud Sync)
+Dès que votre appareil détecte un signal, le protocole de synchronisation s'active discrètement en arrière-plan.
+- **Réconciliation Intelligente** : Notre moteur asynchrone fusionne vos sessions hors-ligne avec votre profil **Supabase**.
+- **Multi-Appareils** : Commencez votre focus sur mobile, retrouvez vos statistiques sur desktop.
+- **Sécurité Militaire** : Vos données sont protégées par les protocoles d'authentification de Supabase, garantissant que votre progression est éternelle.
 
----
+### ⚔️ Gamification : Plus qu'une App, un RPG
+Nous avons transformé la discipline en aventure. Le "Grind" n'est plus une corvée, c'est une ascension.
+- **Évolution de l'Avatar** : Gagnez de l'XP pour monter de niveau. Chaque niveau est une preuve de votre ténacité.
+- **Arbre de Talents Stratégique** : Dépensez vos points pour débloquer des bonus passifs (Gain d'XP x2 le matin, Bouclier anti-pénalité, etc.).
+- **Raid de Boss Hebdomadaire** : Chaque jour, la communauté combat le **Kraken**. Vos minutes de focus sont les coups d'épée qui infligent des dégâts au boss.
+- **Penalty Box™** : Un système qui punit l'abandon mais récompense la persévérance. Brisez votre série de focus et vous devrez faire face aux conséquences de la "Grille".
 
-## 🧬 Stack Technique
-
-| Technologie | Usage |
-| :--- | :--- |
-| **Next.js 14** | Framework React avec App Router |
-| **Supabase** | Authentification JWT & Base de données Cloud |
-| **Dexie.js** | Persistance locale robuste (IndexedDB) |
-| **Zustand** | Gestion d'état globale ultra-légère |
-| **Framer Motion** | Animations fluides et micro-interactions |
-| **Lucide Icons** | Iconographie minimaliste et technique |
-
----
-
-## 🚀 Installation de la Grille
-
-1. **Cloner le dépôt**
-   ```bash
-   git clone https://github.com/NguetchuissiBrunel/Pre_Hackverse_UBUNTU.git
-   cd Pre_Hackverse_UBUNTU
-   ```
-
-2. **Installer les dépendances**
-   ```bash
-   npm install
-   ```
-
-3. **Configurer les variables d'environnement**
-   Créez un fichier `.env.local` :
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=votre_url_supabase
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=votre_cle_anon
-   ```
-
-4. **Lancer le protocole de développement**
-   ```bash
-   npm run dev
-   ```
+### 🎒 Économie et Inventaire
+Accumulez des **Pomocoins** et dépensez-les dans une boutique cyberpunk.
+- **Boucliers de Streak** : Protégez votre progression même quand la vie vous oblige à une pause.
+- **Consommables** : Reset de talents, boosts temporaires, personnalisez votre expérience de combat.
 
 ---
 
-## 🛡️ Architecture & Sécurité
+## 🛠️ Spécifications Techniques (The Registry)
 
-L'application utilise un système de **Synchronisation à double sens** :
-1. Les actions utilisateur sont immédiatement écrites en local (zéro latence).
-2. Un service worker en arrière-plan tente de synchroniser les données avec Supabase.
-3. En cas de conflit, les données locales sont prioritaires pour garantir l'expérience utilisateur.
+FocusGrind repousse les limites des technologies web modernes pour offrir une expérience "Native-Like" :
+
+- **Moteur UI** : Framer Motion pour des transitions fluides à 60 FPS et des effets néon immersifs.
+- **Persistance** : IndexedDB via Dexie pour une gestion de base de données locale ultra-rapide.
+- **Backend-as-a-Service** : Supabase pour l'Auth, la synchronisation temps réel et la sécurité.
+- **PWA Ready** : Support du Service Worker pour une installation complète et un usage hors-ligne total.
+
+---
+
+## 🚀 Initialisation
+
+```bash
+# Activation de la Grille
+git clone https://github.com/NguetchuissiBrunel/Pre_Hackverse_UBUNTU.git
+npm install
+npm run dev
+```
 
 ---
 
-## 👨‍💻 Développé par la Division FocusGrind
-
-*"La distraction est une erreur système. Le Focus est le correctif."*
-
----
-<p align="center">Made with ⚡ for the Hackverse Hackathon</p>
+<div align="center">
+  <h3>Rejoignez la Division FocusGrind</h3>
+  <p><i>Propulsé par la volonté, forgé dans la concentration.</i></p>
+  <img src="public/images/quests.webp" alt="Quests Page" width="500" style="border-radius: 15px; margin-top: 20px;" />
+</div>
