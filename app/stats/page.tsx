@@ -61,7 +61,7 @@ export default function StatsPage() {
         
         <div className="bg-glass-dark border border-yellow-400/30 p-4 rounded-2xl flex flex-col items-center justify-center shadow-inner">
           <Coins className="text-yellow-400 mb-2 drop-shadow-[0_0_8px_#facc15]" size={32} />
-          <span className="text-2xl font-bold text-white">{user.coins}</span>
+          <span className="text-2xl font-bold text-white">{Math.floor(user.coins)}</span>
           <span className="text-xs text-gray-400 uppercase tracking-wider text-center mt-1">Pomocoins<br/>(PC)</span>
         </div>
       </div>

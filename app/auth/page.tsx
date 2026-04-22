@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
-import { UserPlus, Mail, Lock, ShieldCheck, ArrowRight, Zap } from "lucide-react";
+import { UserPlus, Mail, Lock, ShieldCheck, ArrowRight, Zap, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
@@ -11,6 +11,7 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -100,13 +101,20 @@ export default function AuthPage() {
           <div className="relative">
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input 
-              type="password" 
+              type={showPassword ? "text" : "password"} 
               placeholder="MOT DE PASSE" 
               required 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white text-sm focus:border-neon-cyan focus:outline-none transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-12 text-white text-sm focus:border-neon-cyan focus:outline-none transition-colors"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-neon-cyan transition-colors"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
 
           {error && (

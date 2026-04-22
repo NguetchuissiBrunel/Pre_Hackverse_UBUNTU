@@ -1,25 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+
 import { CURRENT_WEEK_BOSS, getWeeklyFocusMinutes } from "@/lib/gamification/bossEngine";
 import { Swords, Zap, Skull, Trophy, History, Info } from "lucide-react";
 import { motion } from "framer-motion";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
+import { useLiveQuery } from "dexie-react-hooks";
+
 export default function BossPage() {
-  const [focusMinutes, setFocusMinutes] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const mins = await getWeeklyFocusMinutes();
-      setFocusMinutes(mins);
-      setLoading(false);
-    };
-    loadData();
-  }, []);
-
   const boss = CURRENT_WEEK_BOSS;
+  
+  const focusMinutes = useLiveQuery(
+    async () => await getWeeklyFocusMinutes(),
+    []
+  ) ?? 0;
+
+  const loading = focusMinutes === undefined;
   const progress = Math.min(100, (focusMinutes / boss.targetMinutes) * 100);
   const isDefeated = focusMinutes >= boss.targetMinutes;
 

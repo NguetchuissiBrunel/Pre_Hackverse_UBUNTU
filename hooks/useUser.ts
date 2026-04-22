@@ -27,6 +27,7 @@ export function useUser() {
   }, []);
 
   const stats = user ? calculateLevelFromXp(user.xp) : null;
+  const processedUser = user ? { ...user, coins: Math.floor(user.coins) } : null;
 
   const addXp = async (amount: number) => {
     if (!user) return;
@@ -44,5 +45,5 @@ export function useUser() {
     });
   };
 
-  return { user, stats, addXp };
+  return { user: processedUser, stats, addXp };
 }

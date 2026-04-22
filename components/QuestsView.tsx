@@ -10,7 +10,7 @@ export function QuestsView({ isNested = false }: { isNested?: boolean }) {
   const dailyQuests = quests.filter(q => q.type === 'daily');
 
   return (
-    <main className={`min-h-screen pb-40 bg-oled-black bg-grid-cyber flex flex-col items-center relative overflow-x-hidden p-6 ${isNested ? 'pt-24' : 'pt-12'}`}>
+    <main className={`min-h-screen pb-40 bg-oled-black bg-grid-cyber flex flex-col items-center relative overflow-x-hidden p-6 ${isNested ? 'pt-48' : 'pt-12'}`}>
       
       {/* Background decorations */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-neon-cyan/5 rounded-full blur-[100px] pointer-events-none" />

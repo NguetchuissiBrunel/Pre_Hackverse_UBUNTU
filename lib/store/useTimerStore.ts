@@ -210,7 +210,7 @@ export const useTimerStore = create<TimerState>((set, get) => ({
           xp: newTotalXp,
           level: newStats.level,
           talentPoints: newTalentPoints,
-          coins: user.coins + durationMin
+          coins: user.coins + Math.floor(durationMin)
         });
       });
     }

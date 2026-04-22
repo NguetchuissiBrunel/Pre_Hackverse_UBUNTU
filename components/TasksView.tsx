@@ -62,7 +62,7 @@ export function TasksView({ isNested = false }: { isNested?: boolean }) {
   const pendingCount = tasks.length - completedCount;
 
   return (
-    <main className={`min-h-screen pb-40 bg-oled-black bg-grid-cyber flex flex-col items-center relative overflow-x-hidden p-6 ${isNested ? 'pt-24' : 'pt-12'}`}>
+    <main className={`min-h-screen pb-40 bg-oled-black bg-grid-cyber flex flex-col items-center relative overflow-x-hidden p-6 ${isNested ? 'pt-48' : 'pt-12'}`}>
 
       {/* Header Decorations */}
       <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-neon-cyan/10 to-transparent pointer-events-none" />
@@ -70,10 +70,10 @@ export function TasksView({ isNested = false }: { isNested?: boolean }) {
       <div className="w-full max-w-2xl z-10 flex flex-col gap-8">
 
         {/* Page Title */}
-        <div className="flex justify-between items-end mt-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mt-8">
           <div>
-            <h1 className="text-4xl font-black uppercase tracking-tighter text-white text-glow-cyan flex items-center gap-3">
-              <LayoutGrid className="text-neon-cyan" /> TERMINAL_TÂCHES
+            <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white text-glow-cyan flex items-center gap-3">
+              <LayoutGrid className="text-neon-cyan shrink-0" /> TERMINAL_TÂCHES
             </h1>
             <p className="text-gray-500 text-xs font-mono uppercase tracking-widest mt-1">
               Protocole d&apos;exécution : {pendingCount} actifs // {completedCount} terminés
@@ -84,7 +84,7 @@ export function TasksView({ isNested = false }: { isNested?: boolean }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsAdding(true)}
-            className="bg-neon-cyan text-oled-black p-3 rounded-xl shadow-neon-cyan flex items-center gap-2 font-black uppercase text-xs"
+            className="w-full sm:w-auto bg-neon-cyan text-oled-black p-3 rounded-xl shadow-neon-cyan flex items-center justify-center gap-2 font-black uppercase text-xs whitespace-nowrap"
           >
             <Plus size={18} /> Nouvelle Tâche
           </motion.button>
@@ -149,20 +149,20 @@ export function TasksView({ isNested = false }: { isNested?: boolean }) {
       {/* Add Task Modal */}
       <AnimatePresence>
         {isAdding && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-4 sm:p-6 overflow-y-auto pt-10 sm:pt-0">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsAdding(false)}
-              className="absolute inset-0 bg-oled-black/80 backdrop-blur-md"
+              className="fixed inset-0 bg-oled-black/80 backdrop-blur-md"
             />
 
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="w-full max-w-md bg-glass-dark border border-neon-cyan/30 rounded-3xl p-8 relative z-10 shadow-2xl"
+              className="w-full max-w-md bg-glass-dark border border-neon-cyan/30 rounded-3xl p-6 sm:p-8 relative z-10 shadow-2xl my-auto"
             >
               <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-6 flex items-center gap-2">
                 <Plus className="text-neon-cyan" /> Initialiser Directive
