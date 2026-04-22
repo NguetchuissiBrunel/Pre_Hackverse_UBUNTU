@@ -16,7 +16,7 @@ export default function Home() {
   const currentDungeon = DUNGEONS.find(d => d.id === activeDungeonId) || DUNGEONS[0];
 
   return (
-    <main className={`min-h-screen bg-oled-black ${currentDungeon.bgClass} flex flex-col items-center relative overflow-y-auto pt-24 pb-32 transition-all duration-700 p-6`}>
+    <main className={`min-h-screen bg-oled-black ${currentDungeon.bgClass} flex flex-col items-center relative overflow-x-hidden overflow-y-auto pt-24 pb-32 transition-all duration-700 p-6`}>
       
       {/* Background Glow */}
       <div 
