@@ -25,9 +25,9 @@ export default function Home() {
       />
       
       {/* Top Bar: XP & Coins */}
-      <div className="absolute top-8 left-0 w-full px-6 flex justify-between items-start z-10">
+      <div className="absolute top-8 left-6 right-6 flex justify-between items-start z-10">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-black tracking-[0.2em] uppercase text-white font-orbitron">
+          <h1 className="text-xl md:text-2xl font-black tracking-widest md:tracking-[0.2em] uppercase text-white font-orbitron">
             <span className="text-neon-cyan/50 text-sm align-middle mr-1">[</span>
             Focus<span className={`text-${currentDungeon.accentColor} drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]`}>Grind</span>
             <span className="text-neon-cyan/50 text-sm align-middle ml-1">]</span>
