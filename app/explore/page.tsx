@@ -4,9 +4,10 @@ import { useUser } from "@/hooks/useUser";
 import { DUNGEONS } from "@/lib/gamification/dungeonData";
 import { CURRENT_WEEK_BOSS, getWeeklyFocusMinutes } from "@/lib/gamification/bossEngine";
 import { useTimerStore } from "@/lib/store/useTimerStore";
-import { Map, Shield, Lock, Unlock, Zap, Swords } from "lucide-react";
+import { Map, Shield, Lock, Unlock, Zap, Swords, ChevronRight, Skull } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function ExplorePage() {
   const { user } = useUser();
@@ -37,44 +38,60 @@ export default function ExplorePage() {
 
       {/* Weekly Boss Section */}
       <div className="w-full max-w-md z-10 mb-10">
-        <div className="bg-glass-dark border border-neon-magenta/50 rounded-2xl p-6 relative overflow-hidden shadow-[0_0_20px_rgba(255,0,255,0.1)]">
-          <div className="absolute top-0 right-0 p-4 opacity-20">
-            <Swords size={80} className="text-neon-magenta" />
-          </div>
-          
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-2">
-              <Shield className="text-neon-magenta" size={20} />
-              <span className="text-xs font-bold text-neon-magenta uppercase tracking-widest">Boss de la Semaine</span>
+        <Link href="/boss" className="block group">
+          <div className="bg-glass-dark border border-neon-magenta/50 rounded-2xl p-6 relative overflow-hidden shadow-[0_0_20px_rgba(255,0,255,0.1)] group-hover:border-neon-magenta transition-all">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Swords size={120} className="text-neon-magenta" />
             </div>
             
-            <h2 className="text-xl font-black text-white uppercase tracking-tight mb-2">{CURRENT_WEEK_BOSS.name}</h2>
-            <p className="text-xs text-gray-400 mb-6 leading-relaxed">{CURRENT_WEEK_BOSS.description}</p>
-            
-            <div className="flex justify-between text-xs mb-2">
-              <span className="text-neon-magenta font-bold">{weeklyMinutes} min</span>
-              <span className="text-gray-500">{CURRENT_WEEK_BOSS.targetMinutes} min</span>
-            </div>
-            
-            {/* Progress Bar */}
-            <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden mb-4 border border-white/10">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: `${bossProgress}%` }}
-                className="h-full bg-neon-magenta shadow-[0_0_10px_#ff00ff]"
-              />
-            </div>
-            
-            <div className="flex gap-4">
-              <div className="flex items-center gap-1 text-[10px] font-bold text-gray-400 uppercase">
-                <span className="text-neon-magenta">XP:</span> +{CURRENT_WEEK_BOSS.rewardXp}
+            <div className="relative z-10">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center gap-2">
+                  <Shield className="text-neon-magenta" size={20} />
+                  <span className="text-[10px] font-black text-neon-magenta uppercase tracking-widest">Secteur Boss Actif</span>
+                </div>
+                <div className="flex items-center gap-1 text-[8px] font-bold text-gray-500 uppercase">
+                  Fin: Dimanche 23:59
+                </div>
               </div>
-              <div className="flex items-center gap-1 text-[10px] font-bold text-gray-400 uppercase">
-                <span className="text-neon-magenta">PC:</span> +{CURRENT_WEEK_BOSS.rewardCoins}
+              
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-xl bg-neon-magenta/20 flex items-center justify-center text-neon-magenta border border-neon-magenta/30">
+                  <Skull size={32} />
+                </div>
+                <div>
+                  <h2 className="text-xl font-black text-white uppercase tracking-tight">{CURRENT_WEEK_BOSS.name}</h2>
+                  <p className="text-[10px] text-gray-400 uppercase tracking-tighter italic">&quot;{CURRENT_WEEK_BOSS.description}&quot;</p>
+                </div>
+              </div>
+              
+              <div className="flex justify-between text-[10px] font-black uppercase mb-2">
+                <span className="text-neon-magenta">PV: {CURRENT_WEEK_BOSS.targetMinutes - weeklyMinutes} min</span>
+                <span className="text-gray-500">Total: {CURRENT_WEEK_BOSS.targetMinutes} min</span>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="w-full h-4 bg-black/40 rounded-full overflow-hidden mb-4 border border-white/5 p-1">
+                <motion.div 
+                  initial={{ width: 0 }}
+                  animate={{ width: `${bossProgress}%` }}
+                  className="h-full bg-gradient-to-r from-red-600 to-neon-magenta shadow-[0_0_15px_#ff00ff] rounded-full"
+                />
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <div className="flex gap-4">
+                  <div className="flex items-center gap-1 text-[9px] font-black text-gray-500 uppercase">
+                    <span className="text-neon-magenta">Récompense:</span> +{CURRENT_WEEK_BOSS.rewardXp} XP
+                  </div>
+                </div>
+                <div className="text-[10px] font-black text-neon-magenta flex items-center gap-1 animate-pulse">
+                  ATTAQUER <ChevronRight size={14} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Dungeons List */}

@@ -2,7 +2,7 @@ import { Howl } from 'howler';
 
 // Le chemin virtuel vers nos futurs sons (dans public/sounds/)
 // Actuellement ce sont des chemins fictifs. L'utilisateur devra placer ses fichiers ici.
-const AUDIO_PATHS = {
+export const AUDIO_PATHS = {
   sfx: {
     start: '/sounds/sfx_start.mp3',
     end: '/sounds/sfx_end.mp3',
@@ -79,22 +79,47 @@ class AudioManager {
     Object.values(this.sfxLib).forEach(sfx => sfx.stop());
   }
 
-  public playAmbience() {
-    // Désactivé à la demande de l'utilisateur
-    return;
+  public playAmbience(track: keyof typeof AUDIO_PATHS.ambience) {
+    if (!this.soundEnabled) return;
+    this.resumeContext();
+
+    // If already playing the same track, do nothing
+    if (this.currentAmbienceId === track && this.currentAmbience?.playing()) return;
+
+    // Stop current ambience
+    this.stopAmbience();
+
+    const src = AUDIO_PATHS.ambience[track];
+    this.currentAmbience = new Howl({
+      src: [src],
+      loop: true,
+      volume: 0.5,
+      autoplay: true,
+      onplayerror: () => this.resumeContext()
+    });
+    this.currentAmbienceId = track;
   }
 
   public stopAmbience() {
-    // Désactivé à la demande de l'utilisateur
-    return;
+    if (this.currentAmbience) {
+      this.currentAmbience.fade(this.currentAmbience.volume(), 0, 1000);
+      const amb = this.currentAmbience;
+      setTimeout(() => amb.stop(), 1000);
+      this.currentAmbience = null;
+      this.currentAmbienceId = null;
+    }
+  }
+
+  public setAmbienceVolume(volume: number) {
+    if (this.currentAmbience) {
+      this.currentAmbience.volume(volume);
+    }
   }
 
   public toggleSound() {
     this.soundEnabled = !this.soundEnabled;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof (Howler as any) !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (Howler as any).mute(!this.soundEnabled);
+    if (typeof Howler !== 'undefined') {
+      Howler.mute(!this.soundEnabled);
     }
     return this.soundEnabled;
   }

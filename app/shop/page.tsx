@@ -6,6 +6,7 @@ import { Coins, Star, Shield, Snowflake, RotateCcw, Plus, Lock, Unlock } from "l
 import { motion } from "framer-motion";
 import { TALENTS, CONSUMABLES } from "@/lib/gamification/shopData";
 import { db } from "@/lib/db/dexie";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const ICONS = {
   shield: Shield,
@@ -20,7 +21,7 @@ export default function ShopPage() {
   const [activeTab, setActiveTab] = useState<'talents' | 'shop' | 'inventory'>('talents');
 
   if (!user) {
-    return <div className="min-h-screen bg-oled-black flex items-center justify-center"><div className="animate-pulse text-neon-cyan">Chargement...</div></div>;
+    return <LoadingSpinner />;
   }
 
   const handleBuyConsumable = async (itemId: string, price: number) => {

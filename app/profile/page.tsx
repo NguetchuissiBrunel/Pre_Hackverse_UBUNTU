@@ -4,12 +4,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
-import { User, LogOut, Shield, Award, Calendar, Mail } from "lucide-react";
+import { useTasks } from "@/hooks/useTasks";
+import { CheckCircle2, User, LogOut, Shield, Award, Calendar, Mail } from "lucide-react";
 import { db } from "@/lib/db/dexie";
 
 export default function ProfilePage() {
   const { user } = useUser();
+  const { tasks } = useTasks();
   const [session, setSession] = useState<{ user?: { email?: string; user_metadata?: { username?: string } } } | null>(null);
+  
+  const completedTasks = tasks.filter(t => t.completed).length;
+
   const router = useRouter();
 
   useEffect(() => {
@@ -48,16 +53,21 @@ export default function ProfilePage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 gap-4 w-full max-w-sm relative z-10 mb-8">
+      <div className="grid grid-cols-3 gap-4 w-full max-w-sm relative z-10 mb-8">
         <div className="bg-glass-dark border border-white/5 p-4 rounded-2xl flex flex-col items-center">
           <Award className="text-yellow-400 mb-1" size={20} />
-          <span className="text-[8px] text-gray-500 uppercase font-black">Niveau Actuel</span>
+          <span className="text-[8px] text-gray-500 uppercase font-black">Niveau</span>
           <span className="text-xl font-black text-white">{user.level}</span>
         </div>
         <div className="bg-glass-dark border border-white/5 p-4 rounded-2xl flex flex-col items-center">
           <Calendar className="text-neon-magenta mb-1" size={20} />
-          <span className="text-[8px] text-gray-500 uppercase font-black">Série (Streak)</span>
-          <span className="text-xl font-black text-white">{user.streak} J</span>
+          <span className="text-[8px] text-gray-500 uppercase font-black">Série</span>
+          <span className="text-xl font-black text-white">{user.streak}J</span>
+        </div>
+        <div className="bg-glass-dark border border-white/5 p-4 rounded-2xl flex flex-col items-center">
+          <CheckCircle2 className="text-neon-cyan mb-1" size={20} />
+          <span className="text-[8px] text-gray-500 uppercase font-black">Tâches</span>
+          <span className="text-xl font-black text-white">{completedTasks}</span>
         </div>
       </div>
 

@@ -12,9 +12,9 @@ export default function Navigation() {
 
   const links = [
     { href: "/", label: "Focus", icon: Timer },
+    { href: "/objectives", label: "Objectifs", icon: Target },
     { href: "/stats", label: "Stats", icon: BarChart2 },
     { href: "/leaderboard", label: "Rangs", icon: Trophy },
-    { href: "/quests", label: "Contrats", icon: Target },
   ];
 
   return (

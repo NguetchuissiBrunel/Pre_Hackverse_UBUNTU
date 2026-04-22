@@ -6,13 +6,14 @@ import { motion } from "framer-motion";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db/dexie";
 import HeatMapDisplay from "@/components/HeatMapDisplay";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function StatsPage() {
   const { user, stats } = useUser();
   const recentSessions = useLiveQuery(() => db.sessions.orderBy('dateEnd').reverse().limit(5).toArray(), []);
 
   if (!user || !stats) {
-    return <div className="min-h-screen bg-oled-black flex items-center justify-center"><div className="animate-pulse text-neon-cyan">Chargement...</div></div>;
+    return <LoadingSpinner />;
   }
 
   return (

@@ -2,23 +2,29 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useTimerStore } from "@/lib/store/useTimerStore";
-import { motion } from "framer-motion";
-import { Play, Pause, Square, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Pause, Square, RotateCcw, Volume2, VolumeX, ListTodo, ChevronDown, CheckCircle2 } from "lucide-react";
 import { audioManager } from "@/lib/audio/audioManager";
 import PenaltyModal from "./PenaltyModal";
 import { usePenaltyBox } from "@/hooks/usePenaltyBox";
 import { useUser } from "@/hooks/useUser";
+import { useTasks } from "@/hooks/useTasks";
+import AudioMixer from "./AudioMixer";
 
 
 export default function TimerDisplay() {
   const { 
-    timeLeft, isRunning, mode, pauseCount, isBerserkerMode,
-    startTimer, pauseTimer, abandonSession, finishSession, resetTimer, setMode, toggleBerserkerMode
+    timeLeft, isRunning, mode, pauseCount, isBerserkerMode, activeTaskId,
+    startTimer, pauseTimer, abandonSession, finishSession, resetTimer, setMode, toggleBerserkerMode, setActiveTask
   } = useTimerStore();
   const { user } = useUser();
+  const { tasks } = useTasks();
   const [soundEnabled, setSoundEnabled] = useState(audioManager.soundEnabled);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
+  const [showTaskSelector, setShowTaskSelector] = useState(false);
   const { isLocked, lockedRemaining } = usePenaltyBox();
+  
+  const activeTask = tasks.find(t => t.id === activeTaskId);
   
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const visibilityTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -29,13 +35,17 @@ export default function TimerDisplay() {
   };
 
   const handleStopClick = () => {
+    if (mode === 'flow') {
+      if (timeLeft > 0) finishSession();
+      return;
+    }
+
     if (isRunning || pauseCount > 0) {
-      if (timeLeft === 0 && mode !== 'flow') return; 
+      if (timeLeft === 0) return; 
       setShowPenaltyModal(true);
       pauseTimer(); 
     } else {
-      if (mode === 'flow') finishSession();
-      else abandonSession(); 
+      abandonSession(); 
     }
   };
 
@@ -141,10 +151,15 @@ export default function TimerDisplay() {
 
       <div className="relative flex flex-col items-center justify-center p-8 bg-glass-dark border border-neon-cyan/30 rounded-3xl backdrop-blur-md shadow-neon-cyan/20 w-full max-w-sm">
 
+        {/* Audio Mixer */}
+        <div className="absolute top-4 left-6">
+          <AudioMixer />
+        </div>
+
         {/* Sound Toggle */}
         <button
           onClick={handleToggleSound}
-          className="absolute top-4 right-4 text-neon-cyan/70 hover:text-neon-cyan transition-colors"
+          className="absolute top-4 right-6 p-3 rounded-full bg-glass-dark border border-white/10 text-neon-cyan/70 hover:text-neon-cyan transition-colors"
         >
           {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
         </button>
@@ -152,7 +167,7 @@ export default function TimerDisplay() {
 
 
         {/* Mode Selector */}
-        <div className="flex gap-2 mb-8 flex-wrap justify-center w-full">
+        <div className="flex gap-2 mb-8 mt-10 flex-wrap justify-center w-full">
           {(['pomodoro', 'deepwork', 'sprint', 'flow'] as const).map((m) => (
             <button
               key={m}
@@ -169,6 +184,70 @@ export default function TimerDisplay() {
               {m}
             </button>
           ))}
+        </div>
+
+        {/* Task Selector */}
+        <div className="w-full mb-6 relative">
+          <button
+            onClick={() => !isRunning && setShowTaskSelector(!showTaskSelector)}
+            disabled={isRunning}
+            className={`w-full p-3 rounded-xl border flex items-center justify-between transition-all font-rajdhani ${
+              isRunning ? 'opacity-50 cursor-not-allowed bg-white/5 border-white/10' : 
+              'bg-white/5 border-white/10 hover:border-neon-cyan/50 hover:bg-white/10'
+            }`}
+          >
+            <div className="flex items-center gap-3 overflow-hidden">
+              <ListTodo size={16} className={activeTask ? 'text-neon-cyan' : 'text-gray-500'} />
+              <span className={`text-xs font-bold truncate ${activeTask ? 'text-white' : 'text-gray-500 uppercase tracking-widest'}`}>
+                {activeTask ? activeTask.title : 'Sélectionner une tâche'}
+              </span>
+            </div>
+            <ChevronDown size={14} className={`text-gray-500 transition-transform ${showTaskSelector ? 'rotate-180' : ''}`} />
+          </button>
+
+          <AnimatePresence>
+            {showTaskSelector && (
+              <>
+                <div className="fixed inset-0 z-20" onClick={() => setShowTaskSelector(false)} />
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-oled-black border border-white/20 rounded-xl overflow-hidden z-30 shadow-2xl max-h-48 overflow-y-auto"
+                >
+                  <button
+                    onClick={() => {
+                      setActiveTask(null);
+                      setShowTaskSelector(false);
+                    }}
+                    className="w-full p-3 text-left text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:bg-white/5 border-b border-white/5"
+                  >
+                    Aucune tâche
+                  </button>
+                  {tasks.filter(t => !t.completed).map(task => (
+                    <button
+                      key={task.id}
+                      onClick={() => {
+                        setActiveTask(task.id!);
+                        setShowTaskSelector(false);
+                      }}
+                      className={`w-full p-3 text-left flex items-center justify-between hover:bg-neon-cyan/10 transition-colors ${activeTaskId === task.id ? 'bg-neon-cyan/5' : ''}`}
+                    >
+                      <span className={`text-xs font-bold truncate ${activeTaskId === task.id ? 'text-neon-cyan' : 'text-white'}`}>
+                        {task.title}
+                      </span>
+                      {activeTaskId === task.id && <CheckCircle2 size={12} className="text-neon-cyan" />}
+                    </button>
+                  ))}
+                  {tasks.filter(t => !t.completed).length === 0 && (
+                    <div className="p-4 text-center">
+                      <p className="text-[10px] text-gray-500 uppercase">Aucune tâche active</p>
+                    </div>
+                  )}
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Timer Circle */}
@@ -239,14 +318,18 @@ export default function TimerDisplay() {
               </motion.button>
             )}
 
-            {mode !== 'flow' && (
+            {(mode !== 'flow' || (mode === 'flow' && timeLeft > 0)) && (
               <motion.button
-                whileHover={{ scale: 1.1, boxShadow: "0 0 20px #ff00ff" }}
+                whileHover={{ scale: 1.1, boxShadow: mode === 'flow' ? "0 0 20px #00f3ff" : "0 0 20px #ff00ff" }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleStopClick}
-                className="w-16 h-16 rounded-full border-2 border-neon-magenta text-neon-magenta flex items-center justify-center hover:bg-neon-magenta hover:text-white transition-colors"
+                className={`w-16 h-16 rounded-full border-2 flex items-center justify-center transition-colors ${
+                  mode === 'flow' 
+                    ? 'border-neon-cyan text-neon-cyan hover:bg-neon-cyan hover:text-oled-black' 
+                    : 'border-neon-magenta text-neon-magenta hover:bg-neon-magenta hover:text-white'
+                }`}
               >
-                <Square fill="currentColor" size={20} />
+                {mode === 'flow' ? <CheckCircle2 size={24} /> : <Square fill="currentColor" size={20} />}
               </motion.button>
             )}
           </div>

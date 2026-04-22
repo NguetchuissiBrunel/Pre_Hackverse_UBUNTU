@@ -27,6 +27,8 @@ interface TimerState {
   tick: () => void;
   syncFromState: (state: Partial<TimerState>) => void;
   savedTimes: Record<TimerMode, number>;
+  activeTaskId: number | null;
+  setActiveTask: (id: number | null) => void;
 }
 
 const MODE_DURATIONS: Record<TimerMode, number> = {
@@ -50,6 +52,9 @@ export const useTimerStore = create<TimerState>((set, get) => ({
   activeDungeonId: 'neon_city',
   isBerserkerMode: false,
   savedTimes: { ...MODE_DURATIONS },
+  activeTaskId: null,
+
+  setActiveTask: (id: number | null) => set({ activeTaskId: id }),
 
   startTimer: () => {
     if (get().isRunning) return;
@@ -190,6 +195,16 @@ export const useTimerStore = create<TimerState>((set, get) => ({
           xp: finalXP,
           interrupted: false
         });
+
+        if (state.activeTaskId && state.mode === 'pomodoro') {
+          const task = await db.tasks.get(state.activeTaskId);
+          if (task) {
+            await db.tasks.update(state.activeTaskId, {
+              actualPomodoros: (task.actualPomodoros || 0) + 1,
+              updatedAt: new Date()
+            });
+          }
+        }
 
         await db.user.update("me", {
           xp: newTotalXp,

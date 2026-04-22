@@ -56,6 +56,19 @@ export interface Routine {
   sessionIds: number[];
 }
 
+export interface Task {
+  id?: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  priority: 'low' | 'medium' | 'high';
+  estimatedPomodoros: number;
+  actualPomodoros: number;
+  tagId?: number;
+}
+
 export interface Trophy {
   id: string;
   unlockedAt: Date;
@@ -73,6 +86,7 @@ const db = new Dexie('FocusGrindDB') as Dexie & {
   quests: EntityTable<Quest, 'id'>;
   presets: EntityTable<Preset, 'id'>;
   routines: EntityTable<Routine, 'id'>;
+  tasks: EntityTable<Task, 'id'>;
   trophies: EntityTable<Trophy, 'id'>;
   settings: EntityTable<Setting, 'key'>;
 };
@@ -85,6 +99,7 @@ db.version(1).stores({
   quests: 'id, type, description, target, progress, rewardXp, rewardCoins, expiresAt, done',
   presets: '++id, name, steps',
   routines: '++id, name, sessionIds',
+  tasks: '++id, title, completed, createdAt, updatedAt, priority, tagId',
   trophies: 'id, unlockedAt',
   settings: 'key, value'
 });

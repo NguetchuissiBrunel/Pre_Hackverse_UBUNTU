@@ -39,49 +39,51 @@
 
 ## 2. Roadmap de développement
 
-### Semaine 1 — V1 : Core Timer God-Tier
+### Semaine 1 — V1 : Core Timer God-Tier (✅ TERMINÉ)
 
 Objectif : timer parfait + sons + statistiques + PWA installable. Base utilisable H24.
 
-- Moteur de timer multi-modes
-- Bibliothèque de sons offline
-- Tableau de bord statistiques complet
-- PWA installable avec mode offline total
+- [x] Moteur de timer multi-modes
+- [x] Bibliothèque de sons offline
+- [x] Tableau de bord statistiques complet
+- [x] PWA installable avec mode offline total
 
-### Semaine 2 — V2 : Gamification Solo Addictive
+### Semaine 2 — V2 : Gamification Solo Addictive (✅ TERMINÉ)
 
 Objectif : transformer l'app en jeu. L'utilisateur farme IRL.
 
-- Système XP & Niveaux
-- Arbre de talents (3 branches)
-- Streak de feu avec multiplicateurs
-- Quêtes quotidiennes et hebdomadaires
-- Donjons thématiques et boss mensuel
-- Boutique (skins, sons, thèmes)
+- [x] Système XP & Niveaux
+- [x] Arbre de talents (3 branches)
+- [x] Streak de feu avec multiplicateurs
+- [x] Quêtes quotidiennes et hebdomadaires
+- [x] Boss hebdomadaire (Le Kraken)
+- [x] Boutique (skins, consommables)
 
-### Semaine 3 — V3 : Outils de Productivité Hardcore
+### Semaine 3 — V3 : Outils de Productivité Hardcore (EN COURS)
 
 Objectif : cockpit de pilote de chasse.
 
-- Mode Coffre-fort (friction maximale à l'abandon)
-- Extension navigateur (liste noire de sites)
-- Penalty Box (blocage en cas d'abandon répété)
-- Time blocking sur grille horaire
-- Routines prédéfinies
-- Estimation vs Temps réel par projet
-- Bilans hebdomadaires automatiques
-- Export CSV / JSON / PDF
+- [x] Mode Coffre-fort (friction maximale à l'abandon : 20 mots)
+- [ ] Extension navigateur (liste noire de sites)
+- [x] Penalty Box (blocage en cas d'abandon répété)
+- [ ] Time blocking sur grille horaire
+- [ ] Routines prédéfinies
+- [x] Terminal de Tâches intégré au timer
+- [ ] Bilans hebdomadaires automatiques
+- [ ] Export CSV / JSON / PDF
 
-### Semaine 4 — Polish & Juice
+### Semaine 4 — Polish & Juice (EN COURS)
 
 Objectif : game feel x10 dopamine.
 
-- Animations Framer Motion sur toutes les transitions
-- Sons UI sur chaque micro-interaction
-- Haptic feedback (mobile)
-- 10 thèmes visuels
-- 20 sons de victoire
-- Fonds animés débloquables
+- [x] Animations Framer Motion sur toutes les transitions
+- [x] Mixeur d'Atmosphères (Pluie, Feu, Café) intégré au timer
+- [x] Consolidation de l'onglet unique "Objectifs"
+- [ ] Sons UI sur chaque micro-interaction (partiel)
+- [ ] Haptic feedback (mobile)
+- [x] Thèmes visuels (Default & Cyberpunk)
+- [ ] 20 sons de victoire
+- [ ] Fonds animés débloquables
 
 ---
 
@@ -289,11 +291,12 @@ Exemple — **Donjon des Maths** :
 - 4 sessions × 45 min, toutes taguées "Maths"
 - Récompense : skin "Calculatrice Dorée"
 
-#### Boss mensuel — "Ton Moi Procrastinateur"
+#### Boss hebdomadaire — "Le Kraken & Co"
 
-- PV du boss = heures non faites le mois précédent × coefficient
-- Le vaincre en accumulant des heures de focus ce mois-ci
-- Récompense : Pomocoin + trophée mensuel
+- Le Boss change chaque semaine
+- PV du boss élevés — nécessite plusieurs sessions pour le vaincre
+- Le vaincre en accumulant des heures de focus
+- Récompense : Pomocoins + XP massif + trophée de raid
 
 #### Trophées (40+)
 
@@ -385,7 +388,7 @@ Exemples affichés automatiquement :
 #### Mode Coffre-fort
 
 - Actif automatiquement pendant tout timer
-- Pour quitter avant la fin : saisir une phrase exacte de 25 mots minimum, sans faute
+- Pour quitter avant la fin : saisir une phrase exacte de 20 mots minimum, sans faute
 - Phrase générée via `crypto.getRandomValues` (non reproductible)
 - Erreur de frappe = rester bloqué, recommencer
 
@@ -721,3 +724,11 @@ Contenu du bilan :
 ---
 
 *Document produit à partir des spécifications complètes — LandryNG, Avril 2025*
+
+---
+
+**Note de mise à jour (22 Avril 2026)** : 
+- Phase d'optimisation de la cohérence globale terminée.
+- Build de production stabilisé et vérifié.
+- Mixeur audio et gestion des tâches consolidée.
+- Prochaine étape : Extension navigateur et bilans automatiques.

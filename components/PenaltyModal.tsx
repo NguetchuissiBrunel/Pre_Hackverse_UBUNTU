@@ -15,7 +15,7 @@ const WORDS = [
 ];
 
 function generatePhrase() {
-  const array = new Uint32Array(15);
+  const array = new Uint32Array(20);
   window.crypto.getRandomValues(array);
   return Array.from(array)
     .map((val) => WORDS[val % WORDS.length])
