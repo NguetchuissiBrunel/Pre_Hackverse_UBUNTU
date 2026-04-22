@@ -1,8 +1,22 @@
 import type { Metadata } from "next";
+import { Orbitron, Rajdhani } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import SyncProvider from "@/components/SyncProvider";
+import CrtOverlay from "../components/CrtOverlay";
+import InstallPWA from "../components/InstallPWA";
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+});
+
+const rajdhani = Rajdhani({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-rajdhani",
+});
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -52,12 +66,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${rajdhani.variable} antialiased`}
       >
         <SyncProvider>
           {children}
         </SyncProvider>
         <Navigation />
+        <CrtOverlay />
+        <InstallPWA />
       </body>
     </html>
   );

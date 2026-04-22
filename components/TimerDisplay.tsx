@@ -196,7 +196,7 @@ export default function TimerDisplay() {
               <span className="text-4xl font-bold text-red-500 text-glow-magenta mb-2">VERROUILLÉ</span>
             ) : (
               <motion.span 
-                className="text-6xl font-bold text-white text-glow-cyan"
+                className="text-6xl font-bold text-white text-glow-cyan font-rajdhani"
                 animate={isRunning ? { scale: [1, 1.02, 1] } : {}}
                 transition={{ repeat: Infinity, duration: 1 }}
               >
@@ -219,8 +219,8 @@ export default function TimerDisplay() {
                 whileTap={!isLocked ? { scale: 0.9 } : {}}
                 onClick={startTimer}
                 disabled={isLocked}
-                className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-                  isLocked ? 'bg-red-900/50 text-red-500 cursor-not-allowed border-2 border-red-500/50' : 'bg-neon-cyan text-oled-black'
+                className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors group/btn ${
+                  isLocked ? 'bg-red-900/50 text-red-500 cursor-not-allowed border-2 border-red-500/50' : 'bg-neon-cyan text-oled-black hover:animate-glitch'
                 }`}
               >
                 <Play fill="currentColor" size={28} className="translate-x-0.5" />

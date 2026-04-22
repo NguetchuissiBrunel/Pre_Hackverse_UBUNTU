@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CURRENT_WEEK_BOSS, getWeeklyFocusMinutes } from "@/lib/gamification/bossEngine";
 import { Swords, Zap, Skull, Trophy, History, Info } from "lucide-react";
 import { motion } from "framer-motion";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function BossPage() {
   const [focusMinutes, setFocusMinutes] = useState(0);
@@ -23,11 +24,7 @@ export default function BossPage() {
   const isDefeated = focusMinutes >= boss.targetMinutes;
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-oled-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-neon-magenta"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (

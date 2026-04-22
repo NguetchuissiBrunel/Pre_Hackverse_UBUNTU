@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Timer, BarChart2, ShoppingCart, Target, Trophy, User, RefreshCw } from "lucide-react";
+import { Timer, BarChart2, Target, Trophy, RefreshCw } from "lucide-react";
 import { useSyncStore } from "@/lib/store/useSyncStore";
 import { motion } from "framer-motion";
 
@@ -15,8 +15,6 @@ export default function Navigation() {
     { href: "/stats", label: "Stats", icon: BarChart2 },
     { href: "/leaderboard", label: "Rangs", icon: Trophy },
     { href: "/quests", label: "Contrats", icon: Target },
-    { href: "/shop", label: "Marché", icon: ShoppingCart },
-    { href: "/profile", label: "Profil", icon: User },
   ];
 
   return (
