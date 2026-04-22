@@ -15,7 +15,7 @@ const WORDS = [
 ];
 
 function generatePhrase() {
-  const array = new Uint32Array(25);
+  const array = new Uint32Array(15);
   window.crypto.getRandomValues(array);
   return Array.from(array)
     .map((val) => WORDS[val % WORDS.length])
@@ -62,7 +62,7 @@ export default function PenaltyModal({ isOpen, onClose, onConfirmAbandon }: Pena
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-oled-black/90 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 bg-oled-black/95 backdrop-blur-md overflow-y-auto"
         >
           <motion.div 
             initial={{ scale: 0.9, y: 20 }}
@@ -83,17 +83,17 @@ export default function PenaltyModal({ isOpen, onClose, onConfirmAbandon }: Pena
               {targetPhrase}
             </div>
 
-            <motion.input
+            <motion.textarea
               animate={error ? { x: [-10, 10, -10, 10, 0] } : {}}
               transition={{ duration: 0.4 }}
-              type="text"
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
               onPaste={handlePaste}
               onCopy={handlePaste}
               spellCheck={false}
               autoComplete="off"
-              className={`w-full bg-transparent border-b-2 outline-none py-2 text-center font-mono focus:border-neon-magenta transition-colors ${error ? 'border-red-500 text-red-400' : 'border-white/20 text-white'}`}
+              rows={3}
+              className={`w-full bg-oled-black/30 border-2 rounded-xl outline-none p-4 text-center font-mono text-sm focus:border-neon-magenta transition-colors resize-none ${error ? 'border-red-500 text-red-400' : 'border-white/10 text-white'}`}
               placeholder="Tapez la phrase exactement ici..."
             />
 
