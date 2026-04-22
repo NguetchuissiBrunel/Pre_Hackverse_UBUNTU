@@ -231,8 +231,3 @@ Dépensez vos points dans **Menu "Marché" → Arbre de Talents**.
 
 Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](./LICENSE) pour plus de détails.
 
----
-
-<p align="center">
-  Fait avec ⚡ rage et ☕ café par <strong>NguetchuissiBrunel</strong> pour le Hackathon.
-</p>
