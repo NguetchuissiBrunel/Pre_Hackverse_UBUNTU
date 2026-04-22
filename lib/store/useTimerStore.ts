@@ -20,6 +20,9 @@ interface TimerState {
   pauseTimer: () => void;
   abandonSession: () => void;
   finishSession: () => void;
+  resetTimer: () => void;
+  setMode: (mode: TimerMode) => void;
+  setActiveDungeon: (id: string) => void;
   toggleBerserkerMode: () => void;
   tick: () => void;
   syncFromState: (state: Partial<TimerState>) => void;
